@@ -18,10 +18,8 @@ function actualizarVariables() {
     varXName = document.getElementById('input-var-x').value || "Variable X";
     varYName = document.getElementById('input-var-y').value || "Variable Y";
 
-    // Borra todas las casillas actuales al actualizar las variables
     dataset = [];
 
-    // Actualizar encabezados con nombres claros y sus letras X e Y correspondientes
     document.getElementById('th-table-x').innerText = `${varXName} (X)`;
     document.getElementById('th-table-y').innerText = `${varYName} (Y)`;
     document.getElementById('th-p-x').innerText = `${varXName} (X)`;
@@ -59,7 +57,6 @@ function updateDataValue(index, field, value) {
 }
 
 function agregarFila() {
-    // Nuevas casillas empiezan en 0
     dataset.push({ x: 0, y: 0 });
     renderDataTable();
     calcularTodo();
@@ -120,6 +117,9 @@ function calcularTodo() {
 
     let pearsonTbody = document.getElementById('pearson-tbody');
     pearsonTbody.innerHTML = '';
+
+    let spearmanTbody = document.getElementById('spearman-tbody');
+    spearmanTbody.innerHTML = '';
 
     if (n === 0) {
         document.getElementById('sum-x').innerHTML = `<b>0</b>`;
@@ -183,8 +183,6 @@ function calcularTodo() {
     let rangosY = calcularRangosAscendentesEnteros(yVals);
 
     let sumD2 = 0;
-    let spearmanTbody = document.getElementById('spearman-tbody');
-    spearmanTbody.innerHTML = '';
 
     dataset.forEach((d, index) => {
         let rx = rangosX[index];
