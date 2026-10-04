@@ -3,9 +3,8 @@ let dataset = [
     { x: 1, y: 80 },
     { x: 2, y: 130 },
     { x: 3, y: 220 },
-    { x: 3, y: 65 },
+    { x: 3, y: 250 },
     { x: 2, y: 95 }
-
 ];
 
 let varXName = "Tipo de Membresía";
@@ -20,11 +19,17 @@ function actualizarVariables() {
     varXName = document.getElementById('input-var-x').value || "Variable X";
     varYName = document.getElementById('input-var-y').value || "Variable Y";
 
+    // Borra todas las casillas actuales al actualizar las variables
+    dataset = [];
+
+    // Actualizar encabezados con nombres claros y sus letras X e Y correspondientes
     document.getElementById('th-table-x').innerText = `${varXName} (X)`;
     document.getElementById('th-table-y').innerText = `${varYName} (Y)`;
-    document.getElementById('th-sp-x').innerText = `Rango (${varXName})`;
-    document.getElementById('th-sp-y').innerText = `Rango (${varYName})`;
-    document.getElementById('chart-legend-text').innerText = `Eje X: ${varXName} | Eje Y: ${varYName}`;
+    document.getElementById('th-p-x').innerText = `${varXName} (X)`;
+    document.getElementById('th-p-y').innerText = `${varYName} (Y)`;
+    document.getElementById('th-sp-x').innerText = `${varXName} (X)`;
+    document.getElementById('th-sp-y').innerText = `${varYName} (Y)`;
+    document.getElementById('chart-legend-text').innerText = `Eje X (${varXName}) vs Eje Y (${varYName})`;
 
     renderDataTable();
     calcularTodo();
@@ -34,6 +39,11 @@ function renderDataTable() {
     const tbody = document.getElementById('data-tbody');
     tbody.innerHTML = '';
     
+    if (dataset.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#64748b;">No hay casillas. Agrega una nueva fila para comenzar.</td></tr>`;
+        return;
+    }
+
     dataset.forEach((item, index) => {
         let rowHTML = `<tr class="data-row" id="row-${index}">
             <td><b>#${index + 1}</b></td>
@@ -50,18 +60,19 @@ function updateDataValue(index, field, value) {
 }
 
 function agregarFila() {
-    dataset.push({ x: 5, y: 100 });
+    // Nuevas casillas empiezan en 0
+    dataset.push({ x: 0, y: 0 });
     renderDataTable();
     calcularTodo();
 }
 
 function eliminarFila() {
-    if (dataset.length > 3) {
+    if (dataset.length > 0) {
         dataset.pop();
         renderDataTable();
         calcularTodo();
     } else {
-        alert("Debes mantener al menos 3 filas para los cálculos estadísticos.");
+        alert("No hay casillas para eliminar.");
     }
 }
 
@@ -74,52 +85,89 @@ function enfocarFila(index) {
         fila.classList.add('highlight-row');
         const primerInput = fila.querySelector('input');
         if (primerInput) primerInput.focus();
-        setTimeout(() => {
-            fila.classList.remove('highlight-row');
-        }, 2000);
+        setTimeout(() => { fila.classList.remove('highlight-row'); }, 2000);
     }
 }
 
-function calcularRangosExactosIUJO(valores) {
+function calcularRangosAscendentesEnteros(valores) {
     let indicesOrdenados = valores
         .map((val, idx) => ({ val, idx }))
         .sort((a, b) => a.val - b.val);
 
     let rangos = new Array(valores.length);
-    let i = 0;
-    let rangoActual = 1;
-
-    while (i < indicesOrdenados.length) {
-        let j = i;
-        while (j < indicesOrdenados.length && indicesOrdenados[j].val === indicesOrdenados[i].val) {
-            j++;
-        }
-        let cantidad = j - i;
-        if (cantidad === 1) {
-            rangos[indicesOrdenados[i].idx] = rangoActual;
-            rangoActual++;
-        } else {
-            for (let k = i; k < j; k++) {
-                rangos[indicesOrdenados[k].idx] = rangoActual + (cantidad - 1) / 2;
-            }
-            rangoActual += cantidad;
-        }
-        i = j;
+    for (let i = 0; i < indicesOrdenados.length; i++) {
+        rangos[indicesOrdenados[i].idx] = i + 1;
     }
     return rangos;
+}
+
+function obtenerInterpretacionFuerzaSimple(val) {
+    let abs = Math.abs(val);
+    let signo = val >= 0 ? "Positiva" : "Negativa";
+    let fuerza = "";
+
+    if (abs >= 0.81) fuerza = "Muy Fuerte";
+    else if (abs >= 0.61) fuerza = "Fuerte";
+    else if (abs >= 0.41) fuerza = "Moderada";
+    else if (abs >= 0.20) fuerza = "Débil";
+    else fuerza = "Muy Débil o Nula";
+
+    return `${signo} y ${fuerza}`;
 }
 
 function calcularTodo() {
     const n = dataset.length;
     let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
 
-    dataset.forEach(d => {
+    let pearsonTbody = document.getElementById('pearson-tbody');
+    pearsonTbody.innerHTML = '';
+
+    if (n === 0) {
+        document.getElementById('sum-x').innerHTML = `<b>0</b>`;
+        document.getElementById('sum-y').innerHTML = `<b>0</b>`;
+        document.getElementById('sum-x2').innerHTML = `<b>0</b>`;
+        document.getElementById('sum-y2').innerHTML = `<b>0</b>`;
+        document.getElementById('sum-xy').innerHTML = `<b>0</b>`;
+        document.getElementById('sum-d2').innerHTML = `<b>0</b>`;
+        document.getElementById('r-value').innerText = "0.00";
+        document.getElementById('r2-value').innerText = "0.00%";
+        document.getElementById('nd-value').innerText = "0.00%";
+        document.getElementById('rs-value').innerText = "0.00";
+        document.getElementById('text-tipo-correlacion').innerText = "Sin datos";
+        document.getElementById('text-pearson').innerText = "Agrega datos para ver la interpretación.";
+        document.getElementById('text-r2').innerText = "Agrega datos para ver el cálculo.";
+        document.getElementById('text-nodet').innerText = "Agrega datos para ver el cálculo.";
+        document.getElementById('text-spearman').innerText = "Agrega datos para ver la interpretación.";
+        renderChartSVG(dataset);
+        return;
+    }
+
+    dataset.forEach((d, index) => {
+        let x2 = d.x * d.x;
+        let y2 = d.y * d.y;
+        let xy = d.x * d.y;
+
         sumX += d.x;
         sumY += d.y;
-        sumXY += (d.x * d.y);
-        sumX2 += (d.x * d.x);
-        sumY2 += (d.y * d.y);
+        sumX2 += x2;
+        sumY2 += y2;
+        sumXY += xy;
+
+        pearsonTbody.innerHTML += `<tr>
+            <td>#${index + 1}</td>
+            <td>${d.x}</td>
+            <td>${d.y}</td>
+            <td>${x2}</td>
+            <td>${y2}</td>
+            <td>${xy}</td>
+        </tr>`;
     });
+
+    document.getElementById('sum-x').innerHTML = `<b>${sumX}</b>`;
+    document.getElementById('sum-y').innerHTML = `<b>${sumY}</b>`;
+    document.getElementById('sum-x2').innerHTML = `<b>${sumX2}</b>`;
+    document.getElementById('sum-y2').innerHTML = `<b>${sumY2}</b>`;
+    document.getElementById('sum-xy').innerHTML = `<b>${sumXY}</b>`;
 
     let numerator = (n * sumXY) - (sumX * sumY);
     let denominator = Math.sqrt(((n * sumX2) - (sumX * sumX)) * ((n * sumY2) - (sumY * sumY)));
@@ -127,13 +175,13 @@ function calcularTodo() {
 
     let r2 = r * r;
     let noDet = 1 - r2;
-    let r2Percent = (r2 * 100).toFixed(4);
-    let noDetPercent = (noDet * 100).toFixed(4);
+    let r2Percent = (r2 * 100).toFixed(2);
+    let noDetPercent = (noDet * 100).toFixed(2);
 
     let xVals = dataset.map(d => d.x);
     let yVals = dataset.map(d => d.y);
-    let rangosX = calcularRangosExactosIUJO(xVals);
-    let rangosY = calcularRangosExactosIUJO(yVals);
+    let rangosX = calcularRangosAscendentesEnteros(xVals);
+    let rangosY = calcularRangosAscendentesEnteros(yVals);
 
     let sumD2 = 0;
     let spearmanTbody = document.getElementById('spearman-tbody');
@@ -146,40 +194,40 @@ function calcularTodo() {
         let diff2 = diff * diff;
         sumD2 += diff2;
 
-        let row = `<tr>
+        spearmanTbody.innerHTML += `<tr>
             <td>#${index + 1}</td>
             <td>${d.x}</td>
-            <td>${rx % 1 === 0 ? rx : rx.toFixed(1)}</td>
+            <td>${rx}</td>
             <td>${d.y}</td>
-            <td>${ry % 1 === 0 ? ry : ry.toFixed(1)}</td>
-            <td>${diff % 1 === 0 ? diff : diff.toFixed(1)}</td>
-            <td>${diff2 % 1 === 0 ? diff2 : diff2.toFixed(1)}</td>
+            <td>${ry}</td>
+            <td>${diff}</td>
+            <td>${diff2}</td>
         </tr>`;
-        spearmanTbody.innerHTML += row;
     });
 
-    document.getElementById('sum-x').innerHTML = `<b>${sumX}</b>`;
-    document.getElementById('sum-y').innerHTML = `<b>${sumY}</b>`;
     document.getElementById('sum-d2').innerHTML = `<b>${sumD2}</b>`;
 
-    let rs = 1 - ((6 * sumD2) / (n * (n * n - 1)));
+    let rs = n > 1 ? 1 - ((6 * sumD2) / (n * (n * n - 1))) : 0;
 
     document.getElementById('r-value').innerText = r.toFixed(4);
     document.getElementById('r2-value').innerText = r2Percent + "%";
     document.getElementById('nd-value').innerText = noDetPercent + "%";
     document.getElementById('rs-value').innerText = rs.toFixed(4);
 
+    let tipoTexto = obtenerInterpretacionFuerzaSimple(r);
+    document.getElementById('text-tipo-correlacion').innerText = `${tipoTexto}`;
+
     document.getElementById('text-pearson').innerText = 
-        `El coeficiente de Pearson (r = ${r.toFixed(4)}) describe la intensidad y dirección lineal de la relación entre "${varXName}" y "${varYName}".`;
+        `La relación entre "${varXName}" y "${varYName}" es de tipo ${tipoTexto.toLowerCase()}. Esto significa que a medida que una variable sube, la otra tiende a comportarse de la misma manera (o en sentido contrario si es negativa).`;
 
     document.getElementById('text-r2').innerText = 
-        `En base a las observaciones tomadas, la variación de "${varYName}" se debe en un ${r2Percent}% a la variación de "${varXName}".`;
+        `El ${r2Percent}% de los cambios en "${varYName}" se explican directamente por los cambios en "${varXName}".`;
 
     document.getElementById('text-nodet').innerText = 
-        `En base a las observaciones tomadas, la variación de "${varYName}" NO se debe en un ${noDetPercent}% a la variación de "${varXName}".`;
+        `El ${noDetPercent}% restante de los cambios en "${varYName}" se debe a otros motivos ajenos a la variable independiente.`;
 
     document.getElementById('text-spearman').innerText = 
-        `El coeficiente de correlación de rango de Spearman (Rs = ${rs.toFixed(4)}) evalúa la asociación basada en la jerarquía u orden de importancia asignado a los datos.`;
+        `Al ordenar los datos por jerarquía (Spearman = ${rs.toFixed(4)}), se confirma una tendencia ${tipoTexto.toLowerCase()} entre ambas variables.`;
 
     renderChartSVG(dataset);
 }
@@ -189,6 +237,8 @@ function renderChartSVG(data) {
     const gridGroup = document.getElementById('grid-lines');
     svgGroup.innerHTML = '';
     gridGroup.innerHTML = '';
+
+    if (data.length === 0) return;
 
     let minX = Math.min(...data.map(d => d.x));
     let maxX = Math.max(...data.map(d => d.x), minX + 1);
@@ -236,10 +286,7 @@ function renderChartSVG(data) {
         title.textContent = `Casilla #${index + 1} -> ${varXName}: ${p.x} | ${varYName}: ${p.y}`;
         circle.appendChild(title);
 
-        circle.addEventListener('click', () => {
-            enfocarFila(index);
-        });
-
+        circle.addEventListener('click', () => { enfocarFila(index); });
         svgGroup.appendChild(circle);
     });
 }

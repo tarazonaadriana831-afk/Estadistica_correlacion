@@ -13,19 +13,17 @@
     <header class="info-header">
         <h1>Análisis Estadístico de Correlación</h1>
         <p>IUJO - Instituto Universitario Jesús Obrero (Extensión Barquisimeto)</p>
-        <div class="header-icon-box">
-        </div>
     </header>
 
     <section class="info-section">
         <h2> Configuración de Variables</h2>
         <div class="config-form">
             <div class="input-group">
-                <label>Nombre Variable X:</label>
-                <input type="text" id="input-var-x" value="tipo de Membresía">
+                <label>Variable Independiente (X):</label>
+                <input type="text" id="input-var-x" value="Tipo de Membresía">
             </div>
             <div class="input-group">
-                <label>Nombre Variable Y:</label>
+                <label>Variable Dependiente (Y):</label>
                 <input type="text" id="input-var-y" value="Monto Mensual ($)">
             </div>
             <button class="btn-primary" onclick="actualizarVariables()">Actualizar Variables</button>
@@ -33,7 +31,7 @@
     </section>
 
     <section class="info-section" id="seccion-tabla">
-        <h2> Datos Muestrales </h2>
+        <h2> Datos Muestrales</h2>
         <p class="section-desc">Modifica los valores directamente en las celdas de la tabla:</p>
         
         <div class="table-responsive">
@@ -51,13 +49,15 @@
         </div>
 
         <div class="table-actions">
-            <button class="btn-secondary" onclick="agregarFila()">➕ Agregar Fila</button>
-            <button class="btn-danger" onclick="eliminarFila()">➖ Eliminar Última</button>
+            <button class="btn-secondary" onclick="agregarFila()"> Agregar Fila</button>
+            <button class="btn-danger" onclick="eliminarFila()">Eliminar Última</button>
         </div>
     </section>
 
     <section class="info-section">
-        <h2>Gráfico de Dispersión y Tendencia</h2>        
+        <h2> Gráfico de Dispersión y Tendencia</h2>
+        <p class="section-desc">💡 <i>Haz clic en cualquier punto para ubicar su fila en la tabla.</i></p>
+        
         <div class="chart-container-box">
             <svg id="scatter-plot" viewBox="0 0 320 200">
                 <rect width="320" height="200" fill="#faf5ff" rx="8" />
@@ -71,32 +71,53 @@
     </section>
 
     <section class="info-section">
-        <h2> Tabla de Rangos para Coeficiente de Spearman (Rs)</h2>
-        <p class="section-desc">Asignación de rangos y cálculo de diferencias:</p>
-        
+        <h2>Tabla  Coeficiente de Pearson (r)</h2>
+        <div class="table-responsive">
+            <table class="spearman-table">
+                <thead>
+                    <tr>
+                        <th>Casillas</th>
+                        <th id="th-p-x">X</th>
+                        <th id="th-p-y">Y</th>
+                        <th>X^2</th>
+                        <th>Y^2</th>
+                        <th>X*Y</th>
+                    </tr>
+                </thead>
+                <tbody id="pearson-tbody"></tbody>
+                <tfoot>
+                    <tr style="background: #f8fafc;">
+                        <td><b>Σ</b></td>
+                        <td id="sum-x"><b>0</b></td>
+                        <td id="sum-y"><b>0</b></td>
+                        <td id="sum-x2"><b>0</b></td>
+                        <td id="sum-y2"><b>0</b></td>
+                        <td id="sum-xy"><b>0</b></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </section>
+
+    <section class="info-section">
+        <h2> Tabla Coeficiente de Spearman (Rs)</h2>
         <div class="table-responsive">
             <table class="spearman-table">
                 <thead>
                     <tr>
                         <th>Casillas</th>
                         <th id="th-sp-x">X</th>
-                        <th>Rango X</th>
+                        <th>Rango RX</th>
                         <th id="th-sp-y">Y</th>
-                        <th>Rango Y</th>
+                        <th>Rango RY</th>
                         <th>d = Rx - Ry</th>
                         <th>d^2</th>
                     </tr>
                 </thead>
-                <tbody id="spearman-tbody">
-                    <!-- Generado por JS -->
-                </tbody>
+                <tbody id="spearman-tbody"></tbody>
                 <tfoot>
-                    <tr>
-                        <td style="text-align:right;"><b>Σ X =</b></td>
-                        <td id="sum-x"><b>0</b></td>
-                        <td colspan="2" style="text-align:right;"><b>Σ Y =</b></td>
-                        <td id="sum-y"><b>0</b></td>
-                        <td style="text-align:right;"><b>Σ d^2 =</b></td>
+                    <tr style="background: #f8fafc;">
+                        <td colspan="6" style="text-align:right;"><b>Suma d^2 =</b></td>
                         <td id="sum-d2"><b>0</b></td>
                     </tr>
                 </tfoot>
@@ -105,19 +126,24 @@
     </section>
 
     <section class="info-section highlight-section">
-        <h2> Resultados y Mensajes</h2>
+        <h2> Resultados</h2>
         
+        <div class="type-badge-box" id="badge-correlacion-tipo">
+            <h3>Tipo de Correlación:</h3>
+            <p id="text-tipo-correlacion">Calculando...</p>
+        </div>
+
         <div class="results-grid-4">
             <div class="result-card">
                 <span>Pearson :</span>
                 <strong id="r-value">0.00</strong>
             </div>
             <div class="result-card">
-                <span>Determinación :</span>
+                <span>Determinación:</span>
                 <strong id="r2-value">0.00%</strong>
             </div>
             <div class="result-card">
-                <span>No Determinación :</span>
+                <span>No Determinación:</span>
                 <strong id="nd-value">0.00%</strong>
             </div>
             <div class="result-card">
@@ -128,28 +154,28 @@
 
         <div class="detailed-messages-container">
             <div class="message-box">
-                <h3>Coeficiente de Pearson:</h3>
+                <h3>Pearson:</h3>
                 <p id="text-pearson">Calculando...</p>
             </div>
 
             <div class="message-box message-det">
-                <h3>Coeficiente de Determinación:</h3>
+                <h3>Determinación:</h3>
                 <p id="text-r2">Calculando...</p>
             </div>
 
             <div class="message-box message-nodet">
-                <h3> Coeficiente de No Determinación :</h3>
+                <h3>No Determinación:</h3>
                 <p id="text-nodet">Calculando...</p>
             </div>
 
             <div class="message-box">
-                <h3> Coeficiente de Spearman:</h3>
+                <h3>Spearman:</h3>
                 <p id="text-spearman">Calculando...</p>
             </div>
         </div>
 
         <div class="footer-sign">
-            <p>Fabricado por: Sali Kabbas, Adriana Tarazona, Diego Silva, Breiner Rodriguez</p>
+            <p>fabricado por: Sali Kabbas, Adriana Tarazona, Diego silva, Breiner Rodriguez</p>
         </div>
     </section>
 

@@ -37,20 +37,8 @@ body {
     padding: 30px 20px;
 }
 
-.info-header h1 {
-    margin: 0 0 5px 0;
-    font-size: 22px;
-}
-
-.info-header p {
-    margin: 0;
-    font-size: 12px;
-    opacity: 0.9;
-}
-
-.header-icon-box {
-    margin-top: 12px;
-}
+.info-header h1 { margin: 0 0 5px 0; font-size: 22px; }
+.info-header p { margin: 0; font-size: 12px; opacity: 0.9; }
 
 .info-section {
     padding: 20px 22px;
@@ -71,16 +59,6 @@ body {
     margin-bottom: 12px;
 }
 
-.placeholder-img {
-    background: #f8fafc;
-    border: 2px dashed var(--border-color);
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
-    font-size: 11px;
-    color: #64748b;
-}
-
 .config-form {
     background: var(--primary-light);
     padding: 12px;
@@ -88,10 +66,7 @@ body {
     border: 1px solid #ede9fe;
 }
 
-.input-group {
-    margin-bottom: 8px;
-}
-
+.input-group { margin-bottom: 8px; }
 .input-group label {
     display: block;
     font-size: 11px;
@@ -121,36 +96,25 @@ button {
 
 button:hover { opacity: 0.9; transform: translateY(-1px); }
 
-.btn-primary {
-    background: var(--primary);
-    color: white;
-    width: 100%;
-    margin-top: 4px;
-}
-
+.btn-primary { background: var(--primary); color: white; width: 100%; margin-top: 4px; }
 .btn-secondary { background: #0284c7; color: white; }
 .btn-danger { background: #e11d48; color: white; }
 
-.table-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 12px;
-}
+.table-actions { display: flex; gap: 10px; margin-top: 12px; }
 
-/* Tabla de Datos Muestrales Horizontal */
-.data-table {
+.data-table, .spearman-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
 }
 
-.data-table th, .data-table td {
+.data-table th, .data-table td, .spearman-table th, .spearman-table td {
     border: 1px solid var(--border-color);
     padding: 6px 8px;
     text-align: center;
 }
 
-.data-table th {
+.data-table th, .spearman-table th {
     background-color: #f8fafc;
     color: var(--primary-dark);
 }
@@ -164,38 +128,9 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
     font-size: 12px;
 }
 
-.data-row.highlight-row {
-    background-color: #fef08a !important;
-}
+.data-row.highlight-row { background-color: #fef08a !important; }
+.table-responsive { overflow-x: auto; }
 
-.data-row.highlight-row input {
-    background-color: #fef08a;
-    border-color: #eab308;
-}
-
-/* Tabla de Spearman */
-.table-responsive {
-    overflow-x: auto;
-}
-
-.spearman-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-}
-
-.spearman-table th, .spearman-table td {
-    border: 1px solid var(--border-color);
-    padding: 6px 8px;
-    text-align: center;
-}
-
-.spearman-table th {
-    background-color: #f8fafc;
-    color: var(--primary-dark);
-}
-
-/* Gráfico SVG */
 .chart-container-box {
     background: #ffffff;
     border: 1px solid var(--border-color);
@@ -203,11 +138,7 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
     padding: 10px;
 }
 
-svg {
-    width: 100%;
-    max-height: 210px;
-    overflow: visible;
-}
+svg { width: 100%; max-height: 210px; overflow: visible; }
 
 .point {
     fill: var(--primary);
@@ -216,29 +147,33 @@ svg {
     cursor: pointer;
     transition: r 0.2s, fill 0.2s;
 }
+.point:hover { r: 8; fill: var(--accent); }
+.trend-line { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4; }
+.chart-legend { font-size: 11px; text-align: center; color: #64748b; margin-top: 8px; font-weight: 500; }
 
-.point:hover {
-    r: 8;
-    fill: var(--accent);
-}
+.highlight-section { background: #faf5ff; }
 
-.trend-line {
-    stroke: var(--accent);
-    stroke-width: 2;
-    stroke-dasharray: 4;
-}
-
-.chart-legend {
-    font-size: 11px;
+/* ESTILO DEL RECUADRO DE TIPO DE CORRELACIÓN */
+.type-badge-box {
+    background: #ede9fe;
+    border: 2px solid var(--primary);
+    padding: 12px;
+    border-radius: 8px;
     text-align: center;
-    color: #64748b;
-    margin-top: 8px;
-    font-weight: 500;
+    margin-bottom: 15px;
 }
 
-/* Resultados en Cuadrícula de 4 */
-.highlight-section {
-    background: #faf5ff;
+.type-badge-box h3 {
+    margin: 0 0 4px 0;
+    font-size: 13px;
+    color: var(--primary-dark);
+}
+
+.type-badge-box p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--primary);
 }
 
 .results-grid-4 {
@@ -256,25 +191,10 @@ svg {
     text-align: center;
 }
 
-.result-card span {
-    display: block;
-    font-size: 10px;
-    color: #64748b;
-    margin-bottom: 2px;
-    font-weight: bold;
-}
+.result-card span { display: block; font-size: 10px; color: #64748b; margin-bottom: 2px; font-weight: bold; }
+.result-card strong { font-size: 14px; color: var(--primary); }
 
-.result-card strong {
-    font-size: 14px;
-    color: var(--primary);
-}
-
-/* Contenedor de Mensajes Detallados */
-.detailed-messages-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+.detailed-messages-container { display: flex; flex-direction: column; gap: 10px; }
 
 .message-box {
     background: var(--primary-light);
@@ -282,35 +202,12 @@ svg {
     padding: 10px 14px;
     border-radius: 6px;
 }
+.message-box.message-det { background: #ecfdf5; border-left-color: #10b981; }
+.message-box.message-nodet { background: #fff1f2; border-left-color: #f43f5e; }
 
-.message-box.message-det {
-    background: #ecfdf5;
-    border-left-color: #10b981;
-}
-
-.message-box.message-nodet {
-    background: #fff1f2;
-    border-left-color: #f43f5e;
-}
-
-.message-box h3 {
-    margin: 0 0 3px 0;
-    font-size: 12px;
-    color: var(--primary-dark);
-}
-
+.message-box h3 { margin: 0 0 3px 0; font-size: 12px; color: var(--primary-dark); }
 .message-box.message-det h3 { color: #047857; }
 .message-box.message-nodet h3 { color: #be123c; }
 
-.message-box p {
-    margin: 0;
-    font-size: 11px;
-    line-height: 1.4;
-}
-
-.footer-sign {
-    text-align: center;
-    font-size: 10px;
-    color: #94a3b8;
-    margin-top: 15px;
-}
+.message-box p { margin: 0; font-size: 11px; line-height: 1.4; }
+.footer-sign { text-align: center; font-size: 10px; color: #94a3b8; margin-top: 15px; }
