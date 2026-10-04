@@ -12,7 +12,9 @@
     
     <header class="info-header">
         <h1>Análisis Estadístico de Correlación</h1>
-        <p>IUJO - Instituto Universitario Jesús Obrero (Extensión Barquisimeto)</p>
+        <p><strong>Enunciado:</strong>En el gimnasio Global-fit, cada membresía ofrece una cantidad determinada
+             de servicios y un precio mensual asignado. Este análisis busca comprobar
+             su tipo de correlacion.</p>
     </header>
 
     <section class="info-section">
@@ -20,11 +22,11 @@
         <div class="config-form">
             <div class="input-group">
                 <label>Variable Independiente (X):</label>
-                <input type="text" id="input-var-x" value="Tipo de Membresía (1=plan semanal, 2=plan mensual, 3= plan trimestral)">
+                <input type="text" id="input-var-x" value="Cantidad de servicios incluidos en la membresia">
             </div>
             <div class="input-group">
                 <label>Variable Dependiente (Y):</label>
-                <input type="text" id="input-var-y" value="Monto Mensual, consumo en tienda($)">
+                <input type="text" id="input-var-y" value="Precio mensual de la membresia">
             </div>
             <button class="btn-primary" onclick="actualizarVariables()">Actualizar Variables</button>
         </div>
@@ -39,8 +41,8 @@
                 <thead>
                     <tr>
                         <th>Casillas</th>
-                        <th id="th-table-x">Tipo de Membresía (X)</th>
-                        <th id="th-table-y">Monto Mensual, consumo en tienda ($) (Y)</th>
+                        <th id="th-table-x">Cantidad de servicios incluidos en la membresia (X)</th>
+                        <th id="th-table-y">Precio mensual de la membresia(Y)</th>
                     </tr>
                 </thead>
                 <tbody id="data-tbody">
@@ -56,7 +58,7 @@
 
     <section class="info-section">
         <h2> Gráfico de Dispersión y Tendencia</h2>
-        <p class="section-desc">💡 <i>Haz clic en cualquier punto para ubicar su fila en la tabla.</i></p>
+        <p class="section-desc"><i>Haz clic en cualquier punto para ubicar su fila en la tabla.</i></p>
         
         <div class="chart-container-box">
             <svg id="scatter-plot" viewBox="0 0 320 200">
@@ -176,6 +178,7 @@
 
         <div class="footer-sign">
             <p>fabricado por: Sali Kabbas, Adriana Tarazona, Diego silva, Breiner Rodriguez</p>
+            <p>IUJO - Instituto Universitario Jesús Obrero (Extensión Barquisimeto)</p>
         </div>
     </section>
 

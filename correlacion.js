@@ -1,14 +1,13 @@
 let dataset = [
-    { x: 1, y: 50 },
-    { x: 1, y: 80 },
-    { x: 2, y: 130 },
-    { x: 3, y: 220 },
-    { x: 3, y: 250 },
-    { x: 2, y: 95 }
+    { x: 1, y: 25 },
+    { x: 2, y: 40 },
+    { x: 3, y: 55 },
+    { x: 4, y: 65},
+    { x: 5, y: 80},
 ];
 
-let varXName = "Tipo de Membresía";
-let varYName = "Monto Mensual, consumo en tienda ($)";
+let varXName = "Cantidad de servicios incluidos en la membresia";
+let varYName = "Precio mensual de la membresia";
 
 window.onload = function() {
     renderDataTable();
