@@ -20,11 +20,11 @@
         <div class="config-form">
             <div class="input-group">
                 <label>Variable Independiente (X):</label>
-                <input type="text" id="input-var-x" value="Tipo de Membresía">
+                <input type="text" id="input-var-x" value="Tipo de Membresía (1=plan semanal, 2=plan mensual, 3= plan trimestral)">
             </div>
             <div class="input-group">
                 <label>Variable Dependiente (Y):</label>
-                <input type="text" id="input-var-y" value="Monto Mensual ($)">
+                <input type="text" id="input-var-y" value="Monto Mensual, consumo en tienda($)">
             </div>
             <button class="btn-primary" onclick="actualizarVariables()">Actualizar Variables</button>
         </div>
@@ -40,7 +40,7 @@
                     <tr>
                         <th>Casillas</th>
                         <th id="th-table-x">Tipo de Membresía (X)</th>
-                        <th id="th-table-y">Monto Mensual ($) (Y)</th>
+                        <th id="th-table-y">Monto Mensual, consumo en tienda ($) (Y)</th>
                     </tr>
                 </thead>
                 <tbody id="data-tbody">

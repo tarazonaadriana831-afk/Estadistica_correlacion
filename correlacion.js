@@ -8,7 +8,7 @@ let dataset = [
 ];
 
 let varXName = "Tipo de Membresía";
-let varYName = "Monto Mensual ($)";
+let varYName = "Monto Mensual, consumo en tienda ($)";
 
 window.onload = function() {
     renderDataTable();
